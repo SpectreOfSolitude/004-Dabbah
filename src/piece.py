@@ -25,7 +25,7 @@ class Piece:
         self.texture_rect = texture_rect
     
     def set_texture(self, size = 80):
-        self.texture = os.path.join(f'assets/images/imgs-{size}px/{self.color}_{self.name}.png')
+        self.texture = os.path.join(f'assets/{self.color}_{self.name}.png')
         
     def add_moves(self, move):
         self.moves.append(move)
@@ -66,4 +66,3 @@ class Rook(Piece):
 class King(Piece):
     def __init__(self, color):            
         super().__init__("king", color, 1000000.00)
-        
