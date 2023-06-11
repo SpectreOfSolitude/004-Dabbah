@@ -11,6 +11,13 @@ class Board:
         self._add_pieces("white")
         self._add_pieces("black")
         
+    def calc_moves(self, piece, row, col):
+        '''
+            Calculate all the possible valid moves of a specific piece on a specific position
+        '''
+        if isinstance(piece, Pawn):
+            pass
+        
     def _create(self):
         for row in range(Files):
             for col in range(Ranks):
