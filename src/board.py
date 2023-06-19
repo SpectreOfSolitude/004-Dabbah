@@ -74,49 +74,80 @@ class Board:
             #             piece.add_moves(move)
                         
         def straightline_moves(incrs):
-            if piece.color == "white":
+            # if piece.color == "white":
                 for incr in incrs:
                     row_incr, col_incr = incr
                     possible_move_row = row + row_incr
                     possible_move_col = col + col_incr
-            else:
-                for incr in incrs:
-                    row_incr, col_incr = incr
-                    possible_move_row = row + row_incr
-                    possible_move_col = col + col_incr
-                        
-                
-            while True:
-                # while true
-                    if Square.in_range(possible_move_row, possible_move_col):
-                        
-                        initial = Square(row, col)
-                        final_piece = self.squares[possible_move_row] [possible_move_col].piece
-                        final = Square(possible_move_row, possible_move_col, final_piece)
-                        move = Move(initial, final)
-                        
-                        # empty
-                        if self.squares[possible_move_col][possible_move_row].isempty():
-                            if bool:
-                                # if not self.in_check(piece, move):
-                                    # append new move
-                                piece.add_moves(move)
-                            else:
-                                #append new move
-                                piece.add_moves(move)
-                            
-                        # has enemy piece
-                        elif self.squares[possible_move_col][possible_move_row].has_rival_piece(piece.color):
-                            # append new move
-                            piece.add_moves(move)
-                            break
-                            
-                    # if not in range
-                    else: break
                     
-                    # incrementing incrs
-                    possible_move_row = possible_move_row + row_incr
-                    possible_move_col = possible_move_col + col_incr
+                    while True:
+                        if Square.in_range(possible_move_row, possible_move_col):
+                            
+                            initial = Square(row, col)
+                            final_piece = self.squares[possible_move_row] [possible_move_col].piece
+                            final = Square(possible_move_col, possible_move_row, final_piece)
+                            move = Move(initial, final)
+                            
+                            # empty
+                            if self.squares[possible_move_row][possible_move_col].isempty():
+                                # if bool:
+                                #     # if not self.in_check(piece, move):
+                                #         # append new move
+                                #     piece.add_moves(move)
+                                # else:
+                                    #append new move
+                                    piece.add_moves(move)
+                                
+                            # has enemy piece
+                            # elif self.squares[possible_move_col][possible_move_row].has_rival_piece(piece.color):
+                            #     # append new move
+                            #     piece.add_moves(move)
+                            #     break
+                                
+                        # if not in range
+                        else: 
+                            break
+                        
+                        # incrementing incrs
+                        possible_move_row = possible_move_row + row_incr
+                        possible_move_col = possible_move_col + col_incr
+            # else:
+            #     for incr in incrs:
+            #         row_incr, col_incr = incr
+            #         possible_move_row = row + row_incr
+            #         possible_move_col = col + col_incr    
+                    
+            #         while True:
+            #             # while true
+            #                 if Square.in_range(possible_move_col, possible_move_row):
+                                
+            #                     initial = Square(col, row)
+            #                     final_piece = self.squares[possible_move_row] [possible_move_col].piece
+            #                     final = Square(possible_move_col, possible_move_row, final_piece)
+            #                     move = Move(initial, final)
+                                
+            #                     # empty
+            #                     if self.squares[possible_move_col][possible_move_row].isempty():
+            #                         # if bool:
+            #                         #     # if not self.in_check(piece, move):
+            #                         #         # append new move
+            #                         #     piece.add_moves(move)
+            #                         # else:
+            #                             #append new move
+            #                             piece.add_moves(move)
+                                    
+            #                     # has enemy piece
+            #                     # elif self.squares[possible_move_col][possible_move_row].has_rival_piece(piece.color):
+            #                     #     # append new move
+            #                     #     piece.add_moves(move)
+            #                     #     break
+                                    
+            #                 # if not in range
+            #                 else: break
+                            
+            #                 # incrementing incrs
+            #                 possible_move_row = possible_move_row + row_incr
+            #                 possible_move_col = possible_move_col + col_incr
                                             
         def silver_moves():
             if piece.color == "white":
@@ -232,9 +263,14 @@ class Board:
             
             
         elif isinstance(piece, Lance):
-            straightline_moves([
-            (0, -1), # up
-            ])
+            if piece.color == "white":
+                straightline_moves([
+                    (-1, 0), # up
+                ])
+            else:
+                straightline_moves([
+                    (1, 0), # up
+                ])
             
         elif isinstance(piece, Bishop):
             straightline_moves([
@@ -273,8 +309,8 @@ class Board:
         #lances
         self.squares[row_other][0] = Square(row_other, 0, Lance(color))
         self.squares[5][5] = Square(5, 5, Lance("white"))
-        self.squares[1][8] = Square(1, 8, Lance("white"))
-        self.squares[1][8] = Square(1, 8, Lance("white"))
+        self.squares[7][8] = Square(7, 8, Lance("white"))
+        self.squares[7][8] = Square(7, 8, Lance("white"))
 
         self.squares[row_other][8] = Square(row_other, 8, Lance(color))
                 

@@ -1,9 +1,9 @@
 
 class Square:
     
-    def __init__(self, horizontal, vertical, piece = None):
-        self.horizontal = horizontal
-        self.vertical = vertical
+    def __init__(self, row, col, piece = None):
+        self.row = row
+        self.col = col
         self.piece = piece
         
     def has_piece(self):
@@ -25,7 +25,7 @@ class Square:
     @staticmethod
     def in_range(*args):
         for arg in args:
-            if arg < -0 or arg > 8:
+            if arg < 0 or arg > 8:
                 return False
         return True
 
