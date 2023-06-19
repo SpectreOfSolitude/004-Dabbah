@@ -30,6 +30,7 @@ class Main:
             
             game.show_bg(screen)
             game.show_moves(screen)
+            game.show_borders(screen)
             game.show_pieces(screen)
             
             if dragger.dragging:
@@ -54,6 +55,7 @@ class Main:
                             #show methods
                             game.show_bg(screen)
                             game.show_moves(screen)
+                            game.show_borders(screen)
                             game.show_pieces(screen)
                 
                 # mouse motion
@@ -63,6 +65,7 @@ class Main:
                         #show methods
                         game.show_bg(screen)
                         game.show_moves(screen)
+                        game.show_borders(screen)
                         game.show_pieces(screen)
                         dragger.update_blit(screen)
                 

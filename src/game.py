@@ -24,13 +24,6 @@ class Game:
                 SegiEmpat = (file*SquareSize, rank*SquareSize, SquareSize, SquareSize)
                 
                 pygame.draw.rect(surface, color, SegiEmpat)
-                pygame.draw.line(surface,borders,(((file)*SquareSize, (rank)*SquareSize)), ((file)*SquareSize, (rank+1)*SquareSize), 3)
-                pygame.draw.line(surface,borders,(((file)*SquareSize, (rank)*SquareSize)), ((file+1)*SquareSize, (rank)*SquareSize), 3)
-                if(file >0):
-                    if(rank >0):
-                        if(file%3 == 0):
-                            if(rank%3 == 0):
-                                pygame.draw.circle(surface, borders, ((file*SquareSize), (rank*SquareSize)),7)
                                 
     def show_pieces(self, surface):
         for row in range(Files):
@@ -59,3 +52,16 @@ class Game:
                 rect = (move.final.horizontal * SquareSize, move.final.vertical * SquareSize, SquareSize, SquareSize)
                 # blit
                 pygame.draw.rect(surface, color, rect)
+                
+    def show_borders(self, surface):
+        borders = (0,0,0)
+
+        for file in range(Files):
+            for rank in range(Ranks):
+                pygame.draw.line(surface,borders,(((file)*SquareSize, (rank)*SquareSize)), ((file)*SquareSize, (rank+1)*SquareSize), 3)
+                pygame.draw.line(surface,borders,(((file)*SquareSize, (rank)*SquareSize)), ((file+1)*SquareSize, (rank)*SquareSize), 3)
+                if(file >0):
+                    if(rank >0):
+                        if(file%3 == 0):
+                            if(rank%3 == 0):
+                                pygame.draw.circle(surface, borders, ((file*SquareSize), (rank*SquareSize)),7)

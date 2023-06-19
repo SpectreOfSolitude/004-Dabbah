@@ -21,10 +21,11 @@ class Square:
     def isempty_or_rival(self, color):
         return self.isempty() or self.has_rival_piece(color) 
     
+    
     @staticmethod
     def in_range(*args):
         for arg in args:
-            if arg < 0 or arg > 7:
+            if arg < -0 or arg > 8:
                 return False
         return True
 
