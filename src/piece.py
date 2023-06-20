@@ -29,6 +29,9 @@ class Piece:
         
     def add_moves(self, move):
         self.moves.append(move)
+        
+    def clear_moves(self):
+        self.moves = []
 
 class Pawn(Piece):
     def __init__(self, color):
@@ -39,17 +42,33 @@ class Pawn(Piece):
             
         super().__init__("pawn", color, 1.0)
         
+class PromotedPawn(Piece):
+    def __init__(self, color):            
+        super().__init__("promoted_pawn", color, 4.20)
+        
 class Lance(Piece):
     def __init__(self, color):            
         super().__init__("lance", color, 4.30)
+        
+class PromotedLance(Piece):
+    def __init__(self, color):            
+        super().__init__("promoted_lance", color, 6.30)
         
 class Knight(Piece):
     def __init__(self, color):            
         super().__init__("knight", color, 4.50)
         
+class PromotedKnight(Piece):
+    def __init__(self, color):            
+        super().__init__("promoted_knight", color, 6.40)
+        
 class Silver(Piece):
     def __init__(self, color):            
         super().__init__("silver", color, 6.40)
+        
+class PromotedSilver(Piece):
+    def __init__(self, color):            
+        super().__init__("promoted_silver", color, 6.70)
         
 class Gold(Piece):
     def __init__(self, color):            
@@ -62,6 +81,14 @@ class Bishop(Piece):
 class Rook(Piece):
     def __init__(self, color):            
         super().__init__("rook", color, 10.40)
+        
+class Dragon(Piece):
+    def __init__(self, color):            
+        super().__init__("dragon", color, 13.00)
+        
+class Horse(Piece):
+    def __init__(self, color):            
+        super().__init__("horse", color, 11.50)
         
 class King(Piece):
     def __init__(self, color):            

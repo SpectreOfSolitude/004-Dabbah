@@ -6,10 +6,88 @@ class Board:
     
     def __init__(self):
         self.squares = [[0, 0, 0, 0, 0, 0, 0, 0, 0,] for col in range (Ranks)]
-        
+        self.last_move = None
         self._create()
         self._add_pieces("white")
         self._add_pieces("black")
+        
+    def move(self, piece, move):
+        initial = move.initial
+        final = move.final
+        
+        # console board move update
+        self.squares[initial.row][initial.col].piece = None
+        self.squares[final.row][final.col].piece = piece
+        
+        # promotion
+        if isinstance(piece,Pawn):
+            self.check_promotion(piece, final)
+        
+        if isinstance(piece,Lance):
+            self.check_promotion(piece, final)
+        
+        if isinstance(piece,Knight):
+            self.check_promotion(piece, final)
+        
+        if isinstance(piece,Silver):
+            self.check_promotion(piece, final)
+        
+        if isinstance(piece,Rook):
+            self.check_promotion(piece, final)
+        
+        if isinstance(piece,Bishop):
+            self.check_promotion(piece, final)
+        
+        # move and clear valid moves
+        piece.moved = True
+        piece.clear_moves()
+        
+        # set last move
+        self.last_move = move
+    
+    def valid_move(self, piece, move):
+        return move in piece.moves
+    
+    def check_promotion(self, piece, final):
+        if(piece.name == "pawn"):
+            if(piece.color == "white"):
+                if final.row <= 2:
+                    self.squares[final.row][final.col].piece = PromotedPawn(piece.color)
+            else:
+                if final.row >= 6:
+                    self.squares[final.row][final.col].piece = PromotedPawn(piece.color)
+                    
+        elif(piece.name == "knight"):
+            if(piece.color == "white"):
+                if final.row <= 2:
+                    self.squares[final.row][final.col].piece = PromotedKnight(piece.color)
+            else:
+                if final.row >= 6:
+                    self.squares[final.row][final.col].piece = PromotedKnight(piece.color)
+                    
+        elif(piece.name == "silver"):
+            if(piece.color == "white"):
+                if final.row <= 2:
+                    self.squares[final.row][final.col].piece = PromotedSilver(piece.color)
+            else:
+                if final.row >= 6:
+                    self.squares[final.row][final.col].piece = PromotedSilver(piece.color)
+        
+        elif(piece.name == "rook"):
+            if(piece.color == "white"):
+                if final.row <= 2:
+                    self.squares[final.row][final.col].piece = Dragon(piece.color)
+            else:
+                if final.row >= 6:
+                    self.squares[final.row][final.col].piece = Dragon(piece.color)
+        
+        elif(piece.name == "bishop"):
+            if(piece.color == "white"):
+                if final.row <= 2:
+                    self.squares[final.row][final.col].piece = Horse(piece.color)
+            else:
+                if final.row >= 6:
+                    self.squares[final.row][final.col].piece = Horse(piece.color)
         
     def calc_moves(self, piece, row, col):
         '''
@@ -18,20 +96,20 @@ class Board:
         def knight_moves():
             if piece.color == "white":
                 possible_moves =[
-                    (col-1, row-2),
-                    (col+1, row-2)
+                    (row-2, col-1),
+                    (row-2, col+1)
                 ]
             else:
                 possible_moves =[
-                    (col-1, row+2),
-                    (col+1, row+2)
+                    (row+2, col-1),
+                    (row+2, col+1)
                 ]
                         
             for possible_move in possible_moves:
                 possible_move_row, possible_move_col = possible_move
                 
                 if Square.in_range(possible_move_row, possible_move_col):
-                    if self.squares[possible_move_col][possible_move_row].isempty_or_rival(piece.color):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_rival(piece.color):
                         # create new squares of the move
                         initial = Square(row, col)
                         final = Square(possible_move_row, possible_move_col)
@@ -51,7 +129,7 @@ class Board:
                     if self.squares [move_row][col].isempty_or_rival(piece.color):
                         #create initial and final move squares
                         initial = Square(row, col)
-                        final = Square (col, move_row)
+                        final = Square (move_row, col)
                         #create a new move
                         move = Move(initial, final)
                         piece.add_moves(move)
@@ -85,7 +163,7 @@ class Board:
                             
                             initial = Square(row, col)
                             final_piece = self.squares[possible_move_row] [possible_move_col].piece
-                            final = Square(possible_move_col, possible_move_row, final_piece)
+                            final = Square(possible_move_row, possible_move_col, final_piece)
                             move = Move(initial, final)
                             
                             # empty
@@ -113,26 +191,26 @@ class Board:
         def silver_moves():
             if piece.color == "white":
                 possible_moves =[
-                    (col-1,row-1),
-                    (col,row-1),
-                    (col+1,row-1),
-                    (col-1,row+1),
-                    (col+1,row+1)              
+                    (row+1,col+1),
+                    (row+1,col-1),
+                    (row-1,col-1),
+                    (row-1,col),
+                    (row-1,col+1)              
                 ]
             else:
                 possible_moves =[
-                    (col-1,row+1),
-                    (col,row+1),
-                    (col+1,row+1),
-                    (col-1,row-1),
-                    (col+1,row-1)              
+                    (row-1,col+1),
+                    (row-1,col-1),
+                    (row+1,col-1),
+                    (row+1,col),
+                    (row+1,col+1)                  
                 ]    
             
             for possible_move in possible_moves:
                 possible_move_row, possible_move_col = possible_move
                 
                 if Square.in_range(possible_move_row, possible_move_col):
-                    if self.squares[possible_move_col][possible_move_row].isempty_or_rival(piece.color):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_rival(piece.color):
                         # create new squares of the move
                         initial = Square(row, col)
                         final = Square(possible_move_row, possible_move_col)
@@ -144,28 +222,28 @@ class Board:
         def gold_moves():
             if piece.color == "white":
                 adjs =[
-                    (col, row+1),
-                    (col-1, row),
-                    (col+1, row),
-                    (col-1, row-1),
-                    (col, row-1),
-                    (col+1, row-1)
+                    (row+1, col),
+                    (row, col+1),
+                    (row, col-1),
+                    (row-1, col-1),
+                    (row-1, col),
+                    (row-1, col+1)
                 ]
             else:
                 adjs =[
-                    (col, row-1),
-                    (col-1, row),
-                    (col+1, row),
-                    (col-1, row+1),
-                    (col, row+1),
-                    (col+1, row+1)
+                    (row-1, col),
+                    (row, col+1),
+                    (row, col-1),
+                    (row+1, col-1),
+                    (row+1, col),
+                    (row+1, col+1)
                 ]
             
             for possible_move in adjs:
                 possible_move_row, possible_move_col = possible_move
                 
                 if Square.in_range(possible_move_row, possible_move_col):
-                    if self.squares[possible_move_col][possible_move_row].isempty_or_rival(piece.color):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_rival(piece.color):
                         # create new squares of the move
                         initial = Square(row, col)
                         final = Square(possible_move_row, possible_move_col)
@@ -176,25 +254,25 @@ class Board:
                           
         def king_moves():
             possible_moves =[
-                (col-1, row-1),
-                (col-1, row),
-                (col-1, row+1),
-                (col+1, row-1),
-                (col+1, row),
-                (col+1, row+1),
-                (col+1, row-1),
-                (col, row-1),
-                (col-1, row-1),
-                (col+1, row+1),
-                (col, row+1),
-                (col-1, row+1)
+                (row-1, col-1),
+                (row-1, col),
+                (row-1, col+1),
+                (row+1, col-1),
+                (row+1, col),
+                (row+1, col+1),
+                (row+1, col-1),
+                (row, col-1),
+                (row-1, col-1),
+                (row+1, col+1),
+                (row, col+1),
+                (row-1, col+1)
             ]
             
             for possible_move in possible_moves:
                 possible_move_row, possible_move_col = possible_move
                 
                 if Square.in_range(possible_move_row, possible_move_col):
-                    if self.squares[possible_move_col][possible_move_row].isempty_or_rival(piece.color):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_rival(piece.color):
                         # create new squares of the move
                         inital = Square(row, col)
                         final = Square(possible_move_row, possible_move_col)
@@ -206,6 +284,18 @@ class Board:
         if isinstance(piece, Pawn):
             pawn_moves()
         
+        elif isinstance(piece, PromotedPawn):
+            gold_moves()
+            
+        elif isinstance(piece, PromotedLance):
+            gold_moves()
+            
+        elif isinstance(piece, PromotedKnight):
+            gold_moves()
+            
+        elif isinstance(piece, PromotedSilver):
+            gold_moves()
+            
         elif isinstance(piece, Knight):
             knight_moves()
             
@@ -234,6 +324,15 @@ class Board:
             (1, -1) #down-left
             ])
             
+        elif isinstance(piece, Horse):
+            straightline_moves([
+            (-1, 1), #up-right
+            (-1, -1), #up-left
+            (1, 1), #down-right
+            (1, -1) #down-left
+            ])
+            king_moves()
+            
         elif isinstance(piece, Rook):
             straightline_moves([
             (-1, 0), #up
@@ -241,6 +340,15 @@ class Board:
             (1, 0), #down
             (0, 1), #right
             ])
+            
+        elif isinstance(piece, Dragon):
+            straightline_moves([
+            (-1, 0), #up
+            (0, -1), #left
+            (1, 0), #down
+            (0, 1), #right
+            ])
+            king_moves()
             
         elif isinstance(piece, King):
             king_moves()
@@ -267,7 +375,7 @@ class Board:
         #knights
         self.squares[row_other][1] = Square(row_other, 1, Knight(color))
         self.squares[row_other][7] = Square(row_other, 7, Knight(color))
-            
+                    
         #Silvers
         self.squares[row_other][2] = Square(row_other, 2, Silver(color))
         self.squares[row_other][6] = Square(row_other, 6, Silver(color))

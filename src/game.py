@@ -6,6 +6,7 @@ from dragger import Dragger
 class Game:
     
     def __init__(self):
+        self.next_player = "white"
         self.board = Board()
         self.dragger = Dragger()
     
@@ -49,7 +50,7 @@ class Game:
                 # color
                 color = '#C86464' if(move.final.row + move.final.col) % 2 == 0 else '#C86464'
                 # rect
-                rect = (move.final.row * SquareSize, move.final.col * SquareSize, SquareSize, SquareSize)
+                rect = (move.final.col * SquareSize, move.final.row * SquareSize, SquareSize, SquareSize)
                 # blit
                 pygame.draw.rect(surface, color, rect)
                 
@@ -65,3 +66,21 @@ class Game:
                         if(file%3 == 0):
                             if(rank%3 == 0):
                                 pygame.draw.circle(surface, borders, ((file*SquareSize), (rank*SquareSize)),7)
+    
+    # other methods
+    
+    def show_last_move(self, surface):
+        if self.board.last_move:
+            initial = self.board.last_move.initial
+            final = self.board.last_move.final
+            
+            for pos in [initial, final]:
+                # color
+                color = (244, 247, 116) if (pos.row + pos.col) % 2 == 0 else (172, 195, 51)
+                # rect
+                rect = (pos.col * SquareSize, pos.row *SquareSize, SquareSize, SquareSize)
+                # blit
+                pygame.draw.rect(surface, color, rect)
+    
+    def next_turn(self):
+        self.next_player = "white" if self.next_player == "black" else "black"
