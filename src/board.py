@@ -48,6 +48,28 @@ class Board:
     def valid_move(self, piece, move):
         return move in piece.moves
     
+    #cek valid move nya dari YT
+    # def getvalidMoves(se1f):
+    # moves = se1f.getAllPossibleMoves()
+    # for i in range(len(moves)-1, -1, -1): 
+    # self .makeMove(moves[i])
+    # self.whiteToMove = not self.whiteToMove
+    # if self.inCheck():
+    # moves. remove(moves[i]) 
+    # self.whiteToMove = not self.whiteToMove
+    # self.undoMove()
+    # if len(moves) == 0: 
+    
+    #ini ngecek apakah checkmate atau ga
+    #   if self.inCheck():
+    #       self.checkMate = True
+    #   else:
+    #    self.staleMate = True
+    #else:
+    #self.checkMate = False
+    #self.staleMate = False
+
+
     def check_promotion(self, piece, final):
         if(piece.name == "pawn"):
             if(piece.color == "white"):
