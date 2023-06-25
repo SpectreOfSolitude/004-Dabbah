@@ -49,26 +49,6 @@ class Board:
     
     def valid_move(self, piece, move):
         return move in piece.moves
-    
-    
-        # def getvalidMoves(self):
-        # moves = self.getAllPossibleMoves()
-        # for i in range(len(moves)-1, -1, -1): 
-        #     self .makeMove(moves[i])
-        #     self.whiteToMove = not self.whiteToMove
-        #     if self.inCheck():
-        #         moves.remove(moves[i]) 
-        #         self.whiteToMove = not self.whiteToMove
-        #         self.undoMove()
-        #     if len(moves) == 0:     
-        #         # ini ngecek apakah checkmate atau ga
-        #         if self.inCheck():
-        #             self.checkMate = True
-        #         else:
-        #             self.staleMate = True
-        #     else:
-        #         self.checkMate = False
-        #         self.staleMate = False
         
     def in_check(self, piece, move):
         temp_piece = copy.deepcopy(piece)

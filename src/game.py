@@ -2,6 +2,7 @@ import pygame
 from const import *
 from board import Board
 from dragger import Dragger
+from ai import AI
 
 class Game:
     
@@ -9,6 +10,7 @@ class Game:
         self.next_player = "white"
         self.board = Board()
         self.dragger = Dragger()
+        self.AI = AI()
     
     #Show Methods
     

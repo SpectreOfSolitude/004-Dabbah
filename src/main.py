@@ -25,6 +25,7 @@ class Main:
         game = self.game
         dragger = self.game.dragger
         board = self.game.board
+        self.ai = self.game.AI
         
         while True:
             # HumanTurn = (GameState.whiteToMove and playerWhite) or (not gs.whiteToMove and playerBlack)
@@ -90,7 +91,7 @@ class Main:
                         # valid move ?
                         if board.valid_move(dragger.piece, move):
                             print("valid.")
-                            print(move)
+                            #print(move)
                             board.move(dragger.piece, move)
                             # show methods
                             game.show_bg(screen)
@@ -99,6 +100,8 @@ class Main:
                             game.show_pieces(screen)
                             # next turn
                             game.next_turn()
+                            game.AI.eval(board)
+                            
                             
                         else:
                             print("invalid!")
@@ -110,8 +113,6 @@ class Main:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                    
-                    
                     
             pygame.display.update()
     

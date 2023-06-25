@@ -19,6 +19,7 @@ class Piece:
         value_sign = 1 if color == "white" else -1
         self.value = value * value_sign
         self.moves = []
+        self.moveString = []
         self.moved = False
         self.texture = texture
         self.set_texture()
@@ -28,7 +29,49 @@ class Piece:
         self.texture = os.path.join(f'assets/{self.color}_{self.name}.png')
         
     def add_moves(self, move):
+        if (move.final.col == 0):
+            PieceFile = "A"
+        elif (move.final.col == 1):
+            PieceFile = "B"
+        elif (move.final.col == 2):
+            PieceFile = "C"
+        elif (move.final.col == 3):
+            PieceFile = "D"
+        elif (move.final.col == 4):
+            PieceFile = "E"
+        elif (move.final.col == 5):
+            PieceFile = "F"
+        elif (move.final.col == 6):
+            PieceFile = "G"
+        elif (move.final.col == 7):
+            PieceFile = "H"
+        elif (move.final.col == 8):
+            PieceFile = "I"
+            
+        if (move.final.row == 0):
+            PieceRank = "9"
+        elif (move.final.row == 1):
+            PieceRank = "8"
+        elif (move.final.row == 2):
+            PieceRank = "7"
+        elif (move.final.row == 3):
+            PieceRank = "6"
+        elif (move.final.row == 4):
+            PieceRank = "5"
+        elif (move.final.row == 5):
+            PieceRank = "4"
+        elif (move.final.row == 6):
+            PieceRank = "3"
+        elif (move.final.row == 7):
+            PieceRank = "2"
+        elif (move.final.row == 8):
+            PieceRank = "1"
+                
         self.moves.append(move)
+        str = ''
+        str += f'{self.name}'
+        str += f" -> ({PieceFile}{PieceRank})"
+        self.moveString.append(str)
         
     def clear_moves(self):
         self.moves = []
