@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 
 from const import *
 from game import Game
@@ -100,7 +101,7 @@ class Main:
                             game.show_pieces(screen)
                             # next turn
                             game.next_turn()
-                            game.AI.eval(board)
+                            game.AI.eval(board, game.next_player)
                             
                             
                         else:

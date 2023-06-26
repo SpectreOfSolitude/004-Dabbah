@@ -12,7 +12,7 @@
 import os
 
 class Piece:
-    
+
     def __init__(self, name, color, value, texture = None, texture_rect = None):
         self.name = name
         self.color = color
@@ -75,6 +75,7 @@ class Piece:
         
     def clear_moves(self):
         self.moves = []
+        self.moveString = []
 
 class Pawn(Piece):
     def __init__(self, color):
@@ -135,4 +136,4 @@ class Horse(Piece):
         
 class King(Piece):
     def __init__(self, color):            
-        super().__init__("king", color, 1000000.00)
+        super().__init__("king", color, 10000.00)

@@ -10,7 +10,7 @@ class Game:
         self.next_player = "white"
         self.board = Board()
         self.dragger = Dragger()
-        self.AI = AI()
+        self.AI = AI(self)
     
     #Show Methods
     

@@ -3,18 +3,20 @@ import copy
 
 class Node:
     
-    def __init__(self, piece,):
-        self.value = 0
+    def __init__(self, value, name):
+        self.value = value
         self.weight = 0
-        self.prob = 0
+        self.name = name
+        self.children = []
     
-    def add_child():
-        pass
+    def add_child(self, value, name):
+        NewNode = Node(value, name)
+        self.children.append(NewNode)
         
     def add_children():
         pass
     
-    def calc_prob():
+    def calc_weight():
         pass
     
     def get_child():
@@ -22,4 +24,3 @@ class Node:
     
     def choose_child():
         pass
-    
