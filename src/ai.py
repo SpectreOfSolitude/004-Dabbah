@@ -28,12 +28,11 @@ class AI:
         return self.engine(None, 1)
 
     
-    def eval(self, board, color, bool=True):
+    def eval(self, board, color):
         
         self.getmoves(board, color)
         # print(self.FreshMoveStrings)
         print("")
-        
         # Reset First
         self.scoreMaterial = 0
         
@@ -45,84 +44,102 @@ class AI:
         print("")
         print(f"Current Position Evaluation: {self.scoreMaterial}")
         
-        if bool == True:
-            self.minimax(self.depth, self.scoreMaterial, board, color)
+        return self.scoreMaterial
     
-    
-    def minimax(self, depth, value, candidate, color):
-        # Tree Making
-    
-        def BFS(nextMoves, value, MoveNames, NewBoard, NewPiece):
-            while (nextMoves != []):
-                if(MoveNames in self.exploredBoards):
-                    temp_value = eval()
-                    self.exploredBoards.append(MoveNames)
-                    tree.add_child(value, MoveNames)
-                    self.NumberOfBoards =+ 1
-                
-                nextMoves.pop()
-                MoveNames.pop()
-            BFSdepth = BFSdepth + 1
+    def minimax(self, SourceBoard, color, newDepth):
+        # Tree Making Searching Algorithms
+        print("THIS IS MINIMAX")
+        def BFS(nextMoves, value, MoveNames, NewBoard, NewPiece, color):
+            while (BFSdepth != newDepth):
+                while (nextMoves != []):
+                    if(MoveNames not in self.exploredBoards):
+                        value = eval(NewBoard, color)
+                        self.exploredBoards.append(MoveNames)
+                        tree.add_child(value, MoveNames)
+                        self.NumberOfBoards =+ 1
+                        NewBoard.move(NewPiece, nextMoves)
+
+                    nextMoves.pop()
+                    MoveNames.pop()
+                BFSdepth = BFSdepth + 1
+            newDepth = newDepth+1
+            self.minimax(NewBoard, ColorSwap,newDepth)
+
                     
         def DFS(nextMoves, depth, value, MoveNames, NewBoard, NewPiece):
             while (depth != self.maxDepth):
-                if(MoveNames in self.exploredBoards):
+                if(MoveNames not in self.exploredBoards):
+                    value = eval(NewBoard, color)
                     self.exploredBoards.append(MoveNames)
                     tree.add_child(value, MoveNames)
                     self.NumberOfBoards =+ 1
+                    NewBoard.move(NewPiece, nextMoves) 
                 
-                NewBoard.move(NewPiece, nextMoves) 
                 depth = depth + 1
-                #eval(NewBoard, depth, ) NEEDS TO BE EDITED
-                    
-    
+                newdepth = newdepth + 1
+                self.minimax(NewBoard, ColorSwap, newDepth)
+                
+            nextMoves.pop()
+            MoveNames.pop()
+
         # Root Node
-        if (depth == 0):
-            tree = Node(value,"Current Pos.") # Rooting
-            
+        if (newDepth == 0):
+
+            print("THIS IS ROOT")
+            init_value = self.eval(SourceBoard, color)
+            tree = Node(init_value, "Current Pos.") # Rooting
+            temp_board = copy.deepcopy(SourceBoard) 
             temp_totalMoves = copy.deepcopy(self.FreshMoves)
             temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
             temp_piece = copy.deepcopy(self.FreshPiece)
-            temp_board = copy.deepcopy(candidate) 
-            temp_board.move(temp_piece, temp_totalMoves)
+            print("ttoal piece")
+            print(temp_totalMoves)
+            print("temp piece")
+            print(temp_piece)
             
-            depth = depth + 1
+            temp_board.move(temp_piece, temp_totalMoves)
+            self.eval(temp_board, color)
+            
+            self.depth = self.depth + 1
             if (color == 'white'):
                 ColorSwap = 'black'
             else:
                 ColorSwap = 'white'
                 
-            self.eval(temp_board, ColorSwap)
-
-            
+            self.minimax(temp_board, ColorSwap,self.depth)
+           
+        # Not root node     
         else:                
-                    
+            value = self.eval(SourceBoard, color)
+            
             # minimizing (black)
             if(self.scoreMaterial > value and color == 'black'):
                 temp_totalMoves = copy.deepcopy(self.FreshMoves)
                 temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
                 temp_piece = copy.deepcopy(self.FreshPiece)
-                temp_board = copy.deepcopy(candidate)
-                temp_board.move(temp_piece, temp_totalMoves)
+                temp_board = copy.deepcopy(SourceBoard)
                 
-                depth = depth + 1
-                self.eval(temp_board, "white")
-                multiprocessing()
+                BFS(temp_totalMoves, value, temp_MoveStrings, temp_board, temp_piece, "white")
+                # multiprocessing(BFS(temp_totalMoves, value, temp_MoveStrings, temp_board.move, temp_piece), 
+                # DFS(temp_totalMoves, depth, value, temp_MoveStrings, temp_board.move, temp_piece))
+                DFS(temp_totalMoves, self.depth, value, temp_MoveStrings, temp_board, temp_piece, "white")
+
+                #depth = depth + 1
+                #self.minimax(temp_board, "white")
         
             # maximizing (white)
-            elif(value < candidate and color == 'white'):
+            elif(value < self.scoreMaterial and color == 'white'):
                 temp_totalMoves = copy.deepcopy(self.FreshMoves)
                 temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
                 temp_piece = copy.deepcopy(self.FreshPiece)
-                temp_board = copy.deepcopy(candidate)
-                
+                temp_board = copy.deepcopy(SourceBoard)
             
-                BFS(temp_totalMoves, value, temp_MoveStrings, temp_board.move, temp_piece)
+                BFS(temp_totalMoves, value, temp_MoveStrings, temp_board, temp_piece, "black")
                 
-                if(bool == True):
-                    DFS(temp_totalMoves, depth, value, temp_MoveStrings, temp_board.move, temp_piece)
-                    depth = depth + 1
-                    self.eval(temp_board, "black")
+                DFS(temp_totalMoves, self.depth, value, temp_MoveStrings, temp_board, temp_piece, "black")
+                self.depth = self.depth + 1
+                #depth = depth + 1
+                #self.minimax(temp_board, "black")
             
         # alpha beta pruning
     
@@ -153,13 +170,14 @@ class AI:
                 if(board.squares[row][col].has_piece()):
                     if(board.squares[row][col].piece.color == pieceColor):
                         board.calc_moves(board.squares[row][col].piece, row, col, bool=True)
-                        if(board.squares[row][col].piece.moves != []):
-                            self.FreshPiece.append(board.squares[row][col].piece)
-                            self.FreshMoves.append(board.squares[row][col].piece.moves)
-                            self.FreshMoveStrings.append(board.squares[row][col].piece.moveString)
-                            
-                            print(board.squares[row][col].piece.moveString)
-                            
-                            board.squares[row][col].piece.moves.clear()
-                            board.squares[row][col].piece.moveString.clear()
+                        #if(board.squares[row][col].piece.moves != []):
+                        self.FreshPiece.append(board.squares[row][col].piece)
+                        self.FreshMoves.append(board.squares[row][col].piece.moves)
+                        self.FreshMoveStrings.append(board.squares[row][col].piece.moveString)
+                        print(board.squares[row][col].piece.moveString)
+    
+                        print("APPEND FRESH MOVES")
+        # print(self.FreshMoves)
+        # print(self.FreshPiece)
+        # print(self.FreshMoveStrings)
                         

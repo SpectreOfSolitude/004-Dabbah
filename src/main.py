@@ -101,8 +101,11 @@ class Main:
                             game.show_pieces(screen)
                             # next turn
                             game.next_turn()
-                            game.AI.eval(board, game.next_player)
-                            
+                            game.AI.minimax(board, game.next_player, 0)
+                            for row in range (Files):
+                                for col in range (Ranks):
+                                    board.squares[row][col].piece.moves.clear()
+                                    board.squares[row][col].piece.moveString.clear()
                             
                         else:
                             print("invalid!")
