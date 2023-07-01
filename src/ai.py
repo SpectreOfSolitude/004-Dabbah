@@ -12,7 +12,6 @@ class AI:
         self.engine = ""
         self.depth = 0
         self.FreshPiece = []
-        self.FreshMoves = []
         self.FreshMoveStrings = []
         self.color = "white"
         self.exploredBoards = []
@@ -30,7 +29,7 @@ class AI:
     
     def eval(self, board, color):
         
-        self.getmoves(board, color)
+        Pieces = self.getmoves(board, color)
         # print(self.FreshMoveStrings)
        # print("")
         # Reset First
@@ -49,23 +48,27 @@ class AI:
     def minimax(self, SourceBoard, color, newDepth):
         # Tree Making Searching Algorithms
         #print("THIS IS MINIMAX")
-        def BFS(nextMoves, value, MoveNames, NewBoard, NewPiece, color, depth):
+        def BFS(value, MoveNames, NewBoard, color, depth):
             #print("GOING FOR BFS")
+            NewPiece = self.getmoves(NewBoard, color)
             print(depth)
             print(self.BFSdepth)
             while (self.BFSdepth <= depth):
                 print("got in")
-                while (nextMoves != []):
+                while (NewPiece[0].moves != []):
                     if(MoveNames not in self.exploredBoards):
-                        value = eval(NewBoard, color)
+                        value = self.eval(NewBoard, color)
                         self.exploredBoards.append(MoveNames)
                         self.tree.add_child(value, MoveNames)
                         #elif(value < self.scoreMaterial and color == 'white'):
                         #    self.tree.add_child(value, MoveNames)
                         self.NumberOfBoards =+ 1
-                        NewBoard.move(NewPiece, nextMoves)
 
-                    nextMoves.pop()
+                        print(NewPiece[0].name)
+                        for moves in NewPiece.moves:
+                            NewBoard.move(NewPiece[0], NewPiece[0].moves)
+                    
+                    NewPiece[0].moves.pop()
                     MoveNames.pop()
                 self.BFSdepth = self.BFSdepth + 1
             depth = depth+1
@@ -79,18 +82,19 @@ class AI:
                 self.minimax(NewBoard, NewColor,newDepth)
 
                     
-        def DFS(nextMoves, depth, value, MoveNames, NewBoard, NewPiece, color):
+        def DFS(depth, value, MoveNames, NewBoard, color):
+            NewPiece = self.getmoves(NewBoard, color)
             while (depth != self.maxDepth):
                 print("GOING FOR DFS")
                 if(MoveNames not in self.exploredBoards):
-                    value = eval(NewBoard, color)
+                    value = self.eval(NewBoard, color)
                     self.exploredBoards.append(MoveNames)
                     if (self.scoreMaterial > value and color == 'black'):
                         self.tree.add_child(value, MoveNames)
                     elif(value < self.scoreMaterial and color == 'white'):
                         self.tree.add_child(value, MoveNames)
                     self.NumberOfBoards =+ 1
-                    NewBoard.move(NewPiece, nextMoves) 
+                    NewBoard.move(NewPiece, NewPiece.moves[0]) 
                 
                 depth = depth + 1
                 newdepth = newdepth + 1
@@ -100,19 +104,18 @@ class AI:
                     NewColor = 'white'
                 self.minimax(NewBoard, NewColor, newdepth)
                 
-            nextMoves.pop()
+            NewPiece[0].moves.pop()
             MoveNames.pop()
 
         # Root Node
         if (newDepth == 0):
-
+            StartingPiece = self.getmoves(SourceBoard, color)
             print("THIS IS ROOT")
             init_value = self.eval(SourceBoard, color)
             self.tree = Node(init_value, "Current Pos.") # Rooting
             temp_board = copy.deepcopy(SourceBoard) 
-            temp_totalMoves = copy.deepcopy(self.FreshMoves)
             temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
-            temp_piece = copy.deepcopy(self.FreshPiece)
+            temp_piece = copy.deepcopy(StartingPiece)
             #print("ttoal piece")
             #print(temp_totalMoves)
             #print("temp piece")
@@ -135,29 +138,25 @@ class AI:
           #  print("NOT GOING FOR ROOT")
             # minimizing (black)
             if(color == 'black'):
-                temp_totalMoves = copy.deepcopy(self.FreshMoves)
                 temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
-                temp_piece = copy.deepcopy(self.FreshPiece)
                 temp_board = copy.deepcopy(SourceBoard)
                 
-                BFS(temp_totalMoves, value, temp_MoveStrings, temp_board, temp_piece, "white", newDepth)
+                BFS(value, temp_MoveStrings, temp_board, "white", newDepth)
                 # multiprocessing(BFS(temp_totalMoves, value, temp_MoveStrings, temp_board.move, temp_piece), 
                 # DFS(temp_totalMoves, depth, value, temp_MoveStrings, temp_board.move, temp_piece))
-                DFS(temp_totalMoves, self.depth, value, temp_MoveStrings, temp_board, temp_piece, "white")
+                DFS(self.depth, value, temp_MoveStrings, temp_board, "white")
 
                 #depth = depth + 1
                 #self.minimax(temp_board, "white")
         
             # maximizing (white)
             elif( color == 'white'):
-                temp_totalMoves = copy.deepcopy(self.FreshMoves)
                 temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
-                temp_piece = copy.deepcopy(self.FreshPiece)
                 temp_board = copy.deepcopy(SourceBoard)
             
-                BFS(temp_totalMoves, value, temp_MoveStrings, temp_board, temp_piece, "black", newDepth)
+                BFS(value, temp_MoveStrings, temp_board , "black", newDepth)
                 
-                DFS(temp_totalMoves, self.depth, value, temp_MoveStrings, temp_board, temp_piece, "black")
+                DFS(self.depth, value, temp_MoveStrings, temp_board, "black")
                 self.depth = self.depth + 1
                 #depth = depth + 1
                 #self.minimax(temp_board, "black")
@@ -187,7 +186,6 @@ class AI:
         #     pass
                 
     def getmoves(self, board, pieceColor):
-        self.FreshMoves.clear()
         self.FreshMoveStrings.clear()
         #print("")
         #print("Available Moves: ")
@@ -198,13 +196,9 @@ class AI:
                         board.calc_moves(board.squares[row][col].piece, row, col, bool=True)
                         #if(board.squares[row][col].piece.moves != []):
                         self.FreshPiece.append(board.squares[row][col].piece)
-                        self.FreshMoves.append(board.squares[row][col].piece.moves)
                         self.FreshMoveStrings.append(board.squares[row][col].piece.moveString)
                         #print(board.squares[row][col].piece.moveString)
-                        
-                        board.squares[row][col].piece.moves.clear()
-                        board.squares[row][col].piece.moveString.clear()
-    
+        return self.FreshPiece
         # print(self.FreshMoves)
         # print(self.FreshPiece)
         # print(self.FreshMoveStrings)
