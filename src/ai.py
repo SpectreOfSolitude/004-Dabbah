@@ -55,27 +55,37 @@ class AI:
             print(self.BFSdepth)
             while (self.BFSdepth <= depth):
                 print("got in")
-                while (NewPiece[0].moves != []):
-                    if(MoveNames not in self.exploredBoards):
-                        value = self.eval(NewBoard, color)
-                        self.exploredBoards.append(MoveNames)
-                        self.tree.add_child(value, MoveNames)
-                        #elif(value < self.scoreMaterial and color == 'white'):
-                        #    self.tree.add_child(value, MoveNames)
-                        self.NumberOfBoards =+ 1
-
-                        print(NewPiece[0].name)
-                        for moves in NewPiece.moves:
-                            NewBoard.move(NewPiece[0], NewPiece[0].moves)
+                i= 0
+                while (i< len(NewPiece)):
+                    while (NewPiece[i].moves != []):
+                        if(MoveNames[0] not in self.exploredBoards):
+                            value = self.eval(NewBoard, color)
+                            self.exploredBoards.append(MoveNames[0])
+                            self.tree.add_child(value, MoveNames[0])
+                            #elif(value < self.scoreMaterial and color == 'white'):
+                            #    self.tree.add_child(value, MoveNames)
+                            self.NumberOfBoards =+ 1
+                            
+                            if (NewPiece[i].moves !=[]):
+                                NewPiece[i].moves.pop(0)
+                                MoveNames.pop(0)
+                            print("Aman")
+                            print(MoveNames[0])
+                            print(self.exploredBoards)
+                        i= i+1
+                    else:
+                        i=i+1
                     
-                    NewPiece[0].moves.pop()
-                    MoveNames.pop()
                 self.BFSdepth = self.BFSdepth + 1
+                print("Mau masuk minimax lagi")
+            
             depth = depth+1
+            
             if (color == 'white'):
                 NewColor = 'black'
             else:
                 NewColor = 'white'
+                
             if(depth > self.maxDepth):
                 size=len(self.tree.children)
                 print(size)
