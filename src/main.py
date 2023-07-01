@@ -101,7 +101,7 @@ class Main:
                             game.show_pieces(screen)
                             # next turn
                             game.next_turn()
-                            #game.AI.minimax(board, game.next_player, 0)
+                            game.AI.minimax(board, game.next_player, 0)
                             
                         else:
                             print("invalid!")
