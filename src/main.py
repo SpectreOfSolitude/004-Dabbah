@@ -101,7 +101,11 @@ class Main:
                             game.show_pieces(screen)
                             # next turn
                             game.next_turn()
+                            
+                            t1_start = time.perf_counter()
                             game.AI.minimax(board, game.next_player, 0)
+                            t1_stop = time.perf_counter()
+                            print(f"Time Taken: {t1_stop-t1_start} ")
                             
                         else:
                             print("invalid!")

@@ -93,7 +93,7 @@ class AI:
                 # #     self.minimax(NewBoard, NewColor,depth)
 
                     
-        def DFS(depth, value, MoveNames, NewBoard, color):
+        def DFS(value, MoveNames, NewBoard, color, depth):
             print("GOING FOR DFS")
             NewPiece = self.getmoves(NewBoard, color)
             print(depth)
@@ -175,10 +175,12 @@ class AI:
                 temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
                 temp_board = copy.deepcopy(SourceBoard)
                 
-                BFS(value, temp_MoveStrings, temp_board, "white", newDepth)
-                # multiprocessing(BFS(temp_totalMoves, value, temp_MoveStrings, temp_board.move, temp_piece), 
-                # DFS(temp_totalMoves, depth, value, temp_MoveStrings, temp_board.move, temp_piece))
-                DFS(self.depth, value, temp_MoveStrings, temp_board, "white")
+                #BFS(value, temp_MoveStrings, temp_board, "white", newDepth)
+                p1 = multiprocessing.Process(target=BFS(value, temp_MoveStrings, temp_board, "white", newDepth))
+                p2 = multiprocessing.Process(target=DFS(value, temp_MoveStrings, temp_board, "white", newDepth))
+                p1.start()
+                p2.start()
+                #DFS(self.depth, value, temp_MoveStrings, temp_board, "white")
 
                 #depth = depth + 1
                 #self.minimax(temp_board, "white")
@@ -188,20 +190,19 @@ class AI:
                 temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
                 temp_board = copy.deepcopy(SourceBoard)
             
-                BFS(value, temp_MoveStrings, temp_board , "black", newDepth)
+                #BFS(value, temp_MoveStrings, temp_board , "black", newDepth)
                 
-                DFS(self.depth, value, temp_MoveStrings, temp_board, "black")
-                self.depth = self.depth + 1
-                #depth = depth + 1
-                #self.minimax(temp_board, "black")
+                #DFS(self.depth, value, temp_MoveStrings, temp_board, "black")
+                p1 = multiprocessing.Process(target=BFS(value, temp_MoveStrings, temp_board, "black", newDepth))
+                p2 = multiprocessing.Process(target=DFS(value, temp_MoveStrings, temp_board, "black", newDepth))
+                p1.start()
+                p2.start()
             
-        if(newDepth >5):
-            print("DONE.")
-            print(f'total Board explored: {self.exploredBoards.len()}')
-            print(self.tree.children.len())
-            
-
-                
+        # if(newDepth >5):
+        #     print("DONE.")
+        #     print(f'total Board explored: {self.exploredBoards.len()}')
+        #     print(self.tree.children.len())
+                            
     def getmoves(self, board, pieceColor):
         self.FreshMoveStrings.clear()
         #print("")
