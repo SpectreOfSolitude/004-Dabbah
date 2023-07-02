@@ -22,6 +22,7 @@ class AI:
         self.maxDepth = 3
         self.tree = None
         self.BFSdepth = 1
+        self.DFSdepth = 1
         
     def getBestMove(self):
         return self.engine(None, 1)
@@ -93,33 +94,57 @@ class AI:
 
                     
         def DFS(depth, value, MoveNames, NewBoard, color):
+            print("GOING FOR DFS")
             NewPiece = self.getmoves(NewBoard, color)
-            while (depth != self.maxDepth):
-                print("GOING FOR DFS")
-                if(MoveNames not in self.exploredBoards):
-                    value = self.eval(NewBoard, color)
-                    self.exploredBoards.append(MoveNames)
-                    if (self.scoreMaterial > value and color == 'black'):
-                        self.tree.add_child(value, MoveNames)
-                    elif(value < self.scoreMaterial and color == 'white'):
-                        self.tree.add_child(value, MoveNames)
-                    self.NumberOfBoards =+ 1
-                    NewBoard.move(NewPiece, NewPiece[0].moves[0]) 
+            print(depth)
+            self.DFSdepth = depth
+            while (self.DFSdepth <= self.maxDepth):
+                i= 0
+                while (i< len(MoveNames)):
+                    while (MoveNames != []):
+                        print(i)
+                        if(MoveNames[0] not in self.exploredBoards):
+                            value = self.eval(NewBoard, color)
+                            self.exploredBoards.append(MoveNames[0])
+                            self.tree.add_child(value, MoveNames[0])
+                            #elif(value < self.scoreMaterial and color == 'white'):
+                            #    self.tree.add_child(value, MoveNames)
+                            self.NumberOfBoards =+ 1
+                            
+                            if (NewPiece[i].moves !=[]):
+                                print(f"All movenames left:{MoveNames}")
+                                NewPiece[i].moves.pop(0)
+                                MoveNames.pop(0)
+                            print("Aman")
+                            print(f"Explored Boards:{self.exploredBoards}")
+                        i= i+1
+                    else:
+                        i=i+1
+            
+            # def DFS(depth, value, MoveNames, NewBoard, color):
+            # NewPiece = self.getmoves(NewBoard, color)
+            # while (depth != self.maxDepth):
+            #     print("GOING FOR DFS")
+            #     if(MoveNames not in self.exploredBoards):
+            #         value = self.eval(NewBoard, color)
+            #         self.exploredBoards.append(MoveNames)
+            #         self.tree.add_child(value, MoveNames)
+            #         self.NumberOfBoards =+ 1
+            #         NewBoard.move(NewPiece[0], NewPiece[0].moves[0]) 
+            #         self.minimax(NewBoard, NewColor, newdepth)
                 
-                depth = depth + 1
-                newdepth = newdepth + 1
-                if (color == 'white'):
-                    NewColor = 'black'
-                else:
-                    NewColor = 'white'
-                self.minimax(NewBoard, NewColor, newdepth)
+            #     depth = depth + 1
+            #     newdepth = newdepth + 1
+            #     if (color == 'white'):
+            #         NewColor = 'black'
+            #     else:
+            #         NewColor = 'white'
                 
-            NewPiece[0].moves.pop()
-            MoveNames.pop()
+            # NewPiece[0].moves.pop()
+            # MoveNames.pop()
 
         # Root Node
         if (newDepth == 0):
-            StartingPiece = self.getmoves(SourceBoard, color)
             print("THIS IS ROOT")
             init_value = self.eval(SourceBoard, color)
             self.tree = Node(init_value, "Current Pos.") # Rooting
