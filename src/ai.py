@@ -53,11 +53,12 @@ class AI:
             NewPiece = self.getmoves(NewBoard, color)
             print(depth)
             print(self.BFSdepth)
-            while (self.BFSdepth <= depth):
+            while (self.BFSdepth <= self.maxDepth):
                 print("got in")
                 i= 0
-                while (i< len(NewPiece)):
-                    while (NewPiece[i].moves != []):
+                while (i< len(MoveNames)):
+                    while (MoveNames != []):
+                        print(i)
                         if(MoveNames[0] not in self.exploredBoards):
                             value = self.eval(NewBoard, color)
                             self.exploredBoards.append(MoveNames[0])
@@ -67,16 +68,17 @@ class AI:
                             self.NumberOfBoards =+ 1
                             
                             if (NewPiece[i].moves !=[]):
+                                print(f"All movenames left:{MoveNames}")
                                 NewPiece[i].moves.pop(0)
                                 MoveNames.pop(0)
                             print("Aman")
-                            print(MoveNames[0])
-                            print(self.exploredBoards)
+                            print(f"Explored Boards:{self.exploredBoards}")
                         i= i+1
                     else:
                         i=i+1
                     
                 self.BFSdepth = self.BFSdepth + 1
+                print(self.BFSdepth)
                 print("Mau masuk minimax lagi")
             
             depth = depth+1
@@ -86,8 +88,10 @@ class AI:
             else:
                 NewColor = 'white'
                 
-            if(depth > self.maxDepth):
+            if(depth < self.maxDepth):
+                print("masuk")
                 size=len(self.tree.children)
+                NewBoard.move(NewPiece, NewPiece.moves[0]) 
                 print(size)
                 self.minimax(NewBoard, NewColor,newDepth)
 
@@ -125,7 +129,6 @@ class AI:
             self.tree = Node(init_value, "Current Pos.") # Rooting
             temp_board = copy.deepcopy(SourceBoard) 
             temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
-            temp_piece = copy.deepcopy(StartingPiece)
             #print("ttoal piece")
             #print(temp_totalMoves)
             #print("temp piece")
@@ -145,7 +148,7 @@ class AI:
         # Not root node     
         else:                
             value = self.eval(SourceBoard, color)
-          #  print("NOT GOING FOR ROOT")
+            
             # minimizing (black)
             if(color == 'black'):
                 temp_MoveStrings = copy.deepcopy(self.FreshMoveStrings)
@@ -204,9 +207,9 @@ class AI:
                 if(board.squares[row][col].has_piece()):
                     if(board.squares[row][col].piece.color == pieceColor):
                         board.calc_moves(board.squares[row][col].piece, row, col, bool=True)
-                        #if(board.squares[row][col].piece.moves != []):
-                        self.FreshPiece.append(board.squares[row][col].piece)
-                        self.FreshMoveStrings.append(board.squares[row][col].piece.moveString)
+                        if(board.squares[row][col].piece.moves != []):
+                            self.FreshPiece.append(board.squares[row][col].piece)
+                            self.FreshMoveStrings.append(board.squares[row][col].piece.moveString)
                         #print(board.squares[row][col].piece.moveString)
         return self.FreshPiece
         # print(self.FreshMoves)
