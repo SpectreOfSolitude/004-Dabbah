@@ -52,9 +52,8 @@ class AI:
             #print("GOING FOR BFS")
             NewPiece = self.getmoves(NewBoard, color)
             print(depth)
-            print(self.BFSdepth)
+            self.BFSdepth = depth
             while (self.BFSdepth <= self.maxDepth):
-                print("got in")
                 i= 0
                 while (i< len(MoveNames)):
                     while (MoveNames != []):
@@ -78,22 +77,19 @@ class AI:
                         i=i+1
                     
                 self.BFSdepth = self.BFSdepth + 1
-                print(self.BFSdepth)
-                print("Mau masuk minimax lagi")
+                # print(self.BFSdepth)
+                # print("Mau masuk minimax lagi")
             
-            depth = depth+1
-            
-            if (color == 'white'):
-                NewColor = 'black'
-            else:
-                NewColor = 'white'
+                # depth = depth+1
                 
-            if(depth < self.maxDepth):
-                print("masuk")
-                size=len(self.tree.children)
-                NewBoard.move(NewPiece, NewPiece.moves[0]) 
-                print(size)
-                self.minimax(NewBoard, NewColor,newDepth)
+                # if (color == 'white'):
+                #     NewColor = 'black'
+                # else:
+                #     NewColor = 'white'
+                # # if(depth < self.maxDepth):
+                # #     print("masuk")
+                # #     NewBoard.move(NewPiece[0], NewPiece[0].moves[0]) 
+                # #     self.minimax(NewBoard, NewColor,depth)
 
                     
         def DFS(depth, value, MoveNames, NewBoard, color):
@@ -108,7 +104,7 @@ class AI:
                     elif(value < self.scoreMaterial and color == 'white'):
                         self.tree.add_child(value, MoveNames)
                     self.NumberOfBoards =+ 1
-                    NewBoard.move(NewPiece, NewPiece.moves[0]) 
+                    NewBoard.move(NewPiece, NewPiece[0].moves[0]) 
                 
                 depth = depth + 1
                 newdepth = newdepth + 1
@@ -179,24 +175,7 @@ class AI:
             print(f'total Board explored: {self.exploredBoards.len()}')
             print(self.tree.children.len())
             
-        # alpha beta pruning
-    
-        # #(black)
-        # if (candidate != None and value < candidate and depth % 2 == 0):
-        #     pass
-        
-        # #(white)
-        # if (candidate != None and value > candidate and depth % 2 != 0):
-        #     pass
-        # # alpha beta pruning
-    
-        # #(black)
-        # if (candidate != None and value < candidate and depth % 2 == 0):
-        #     pass
-        
-        # #(white)
-        # if (candidate != None and value > candidate and depth % 2 != 0):
-        #     pass
+
                 
     def getmoves(self, board, pieceColor):
         self.FreshMoveStrings.clear()
